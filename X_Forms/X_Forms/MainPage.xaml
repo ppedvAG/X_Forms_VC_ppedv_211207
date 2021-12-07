@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="X_Forms.MainPage"
+             
+             xmlns:local="clr-namespace:X_Forms"
+             Title="MainPage">
+
+    <ContentPage.Resources>
+        <x:String x:Key="BspString">Hallo, ich bin eine Resource</x:String>
+        <local:FactorConverter x:Key="factorConverter"/>
+    </ContentPage.Resources>
+
+    <StackLayout HorizontalOptions="FillAndExpand"
+                 VerticalOptions="FillAndExpand"
+                 Orientation="Vertical"
+                 BackgroundColor="LightBlue"
+                 Padding="10">
+        
+        <Label Text="Hallo, ich bin ein String"
+               TextColor="Red"
+               FontSize="Medium"
+               HorizontalOptions="FillAndExpand"
+               x:Name="Lbl_Output"/>
+
+        <Button x:Name="Btn_KlickMich"
+                Text="Klick mich, ich bin ein Button"
+                Clicked="Btn_KlickMich_Clicked"
+                BackgroundColor="DarkMagenta"/>
+
+        <ImageButton x:Name="Ibt_Beispiel"
+                     Source="test.png"
+                     WidthRequest="75"
+                     BackgroundColor="Transparent"
+                     Clicked="Ibt_Beispiel_Clicked"/>
+
+        <!--<CheckBox RadioButtonGroup.GroupName="Eins"
+                  x:Name="Cbx_eins"/>-->
+
+        <Button Text="{StaticResource BspString}"
+                FontSize="{StaticResource GlobalFontSize}"
+                Style="{StaticResource BtnStyle}"/>
+
+        <StackLayout Orientation="Horizontal">
+            <Slider x:Name="Sdr_Binding"
+                    Minimum="0"
+                    Maximum="100"
+                    WidthRequest="300"/>
+            <Label Text="{Binding Source={x:Reference Sdr_Binding}, Path=Value, Mode=OneWay, StringFormat='{0}: Wert'}"/>
+        </StackLayout>
+        
+        <StackLayout Orientation="Horizontal">
+            <Slider x:Name="Sdr_Binding_02"
+                    Minimum="0"
+                    Maximum="100"
+                    WidthRequest="300"/>
+            <Label Text="{Binding Source={x:Reference Sdr_Binding_02}, Path=Value, Mode=OneWay, StringFormat='{0}: Wert',
+                   Converter={StaticResource factorConverter},
+                   ConverterParameter=2.5}"/>
+        </StackLayout>
+
+
+        <StackLayout x:Name="Stl_DataBinding">
+            <StackLayout.BindingContext>
+                <local:Person Vorname="Rainer" Nachname="Zufall"/>
+            </StackLayout.BindingContext>
+
+            <Label Text="{Binding Vorname}"/>
+            <Entry Text="{Binding Nachname}"/>
+
+            <Button Text="Namen ändern" x:Name="Btn_Name" Clicked="Btn_Name_Clicked"/>
+        </StackLayout>
+
+        <ListView x:Name="LstV_Namen"
+                  HeightRequest="150"
+                  ItemsSource="{Binding Personenliste}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Horizontal" Padding="2">
+                            <Label Text="{Binding Vorname}"/>
+                            <Label Text="{Binding Nachname}"/>
+                        </StackLayout>
+
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="Löschen" Clicked="MenuItem_Clicked" CommandParameter="{Binding}"/>
+                        </ViewCell.ContextActions>
+                        
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button Text="Absolute" Clicked="Button_Clicked"/>
+
+    </StackLayout>
+
+</ContentPage>
