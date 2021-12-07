@@ -11,51 +11,76 @@ namespace X_Forms
 {
     public partial class MainPage : ContentPage
     {
+        //Property zum Zwischenspeichern der Personenliste (ObservableCollection ist eine generische Liste, welche die GUI
+        //automatisch über Veränderungen innerhalb der Liste informiert)
         public ObservableCollection<Person> Personenliste { get; set; } = new ObservableCollection<Person>()
         {
             new Person(){Vorname="Rainer", Nachname="Zufall"},
             new Person(){Vorname="Anna", Nachname="Nass"}
         };
 
+        //Konstruktor
         public MainPage()
         {
+            //Initialisierung der UI (Xaml-Datei). Sollte immer erste Aktion des Konstruktors sein
             InitializeComponent();
 
+            //Neuzuweisung einer UI-Property über die x:Name-Property des Steuerelements
+            Lbl_Main.Text = "Hallo Xamarin";
+
+            //Durch Setzen des BindingContextes nehmen Kurzbindungen aus dem XAML-Code automatisch Bezug auf die Properties
+            //des im BindingContext gesetzten Objekts
             this.BindingContext = this;
         }
 
         private void Btn_KlickMich_Clicked(object sender, EventArgs e)
         {
-            Btn_KlickMich.Text = "Wurde geklickt";
+            //Neuzuweisung einer Property des Eventauslösenden Steuerelements
+            (sender as Button).Text = "Wurde geklickt";
 
-            (sender as Button).BackgroundColor = Color.White;
+            Personenliste.Add(new Person() { Vorname = Ent_Vorname?.Text, Nachname = Ent_Nachname?.Text });
         }
 
-        private void Ibt_Beispiel_Clicked(object sender, EventArgs e)
+        private async void IBtn_Beispiel_Clicked(object sender, EventArgs e)
         {
-            Lbl_Output.Text = "ImageButton geklickt";
+            //Anzeige einer 'MessageBox' und Abfrage der User-Antwort
+            bool erg = await DisplayAlert("Begrüßung", "Geht es dir gut?", "Ja", "Nein");
+
+            if (erg)
+                //Neuzuweisung der Textproperty des Labels mit dem Ausgewählten Element des Pickers
+                Lbl_Main.Text = Pkr_Monkeys.SelectedItem?.ToString();
         }
 
         private void Btn_Name_Clicked(object sender, EventArgs e)
         {
-            (Stl_DataBinding.BindingContext as Person).Vorname = "Martin";
+            //Änderung einer Property des BindingContexts des StackLayouts (INotifyPropertyChanged informiert GUI über Veränderung (vgl. Person.cs))
+            (StL_DataBinding.BindingContext as Person).Vorname = "Martin";
+        }
+
+        private void Btn_Push_Clicked(object sender, EventArgs e)
+        {
+            //Aufruf einer neuen Seite innerhalb der aktuellen NavigationPage 
+            Navigation.PushAsync(new Layouts.GridLayoutBsp());
+        }
+
+        private void Btn_PushModal_Clicked(object sender, EventArgs e)
+        {
+            //Aufruf einer neuen Seite innerhalb der aktuellen NavigationPage, welche aber keinen 'Zurück'-Button anzeigt
+            Navigation.PushModalAsync(new Layouts.AbsoluteLayoutBsp());
         }
 
         private async void MenuItem_Clicked(object sender, EventArgs e)
         {
+            //Anzeige einer 'MessageBox' und Abfrage der User-Antwort
             bool result = await DisplayAlert("Löschung", "Soll diese Person wirklich gelöscht werden?", "Ja", "Nein");
 
             if (result)
             {
-                Person p = (sender as MenuItem).CommandParameter as Person;
+                //Löschen eines Listeneintrags
+                Person person = (sender as MenuItem).CommandParameter as Person;
 
-                Personenliste.Remove(p);
+                Personenliste.Remove(person);
             }
-        }
-
-        private void Button_Clicked(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new Layouts.AbsolutLayoutBsp());
         }
     }
 }

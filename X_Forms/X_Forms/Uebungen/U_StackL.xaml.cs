@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace X_Forms.Layouts
+namespace X_Forms.Uebungen
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AbsolutLayoutBsp : ContentPage
+    public partial class U_StackL : ContentPage
     {
-        public AbsolutLayoutBsp()
+        public U_StackL()
         {
             InitializeComponent();
         }
