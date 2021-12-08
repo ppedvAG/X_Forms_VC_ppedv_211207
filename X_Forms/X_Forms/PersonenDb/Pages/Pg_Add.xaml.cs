@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using X_Forms.PersonenDb.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -18,7 +18,7 @@ namespace X_Forms.PersonenDb.Pages
             //GUI-Initialisierung
             InitializeComponent();
 
-            //Completed-EventHandler-Zuweisung (User-Kompfort)
+            //Completed-EventHandler-Zuweisung (User-Komfort)
             Entry_Vorname.Completed += (s, e) => Entry_Nachname.Focus();
             Entry_Nachname.Completed += Btn_AddPerson_Clicked;
             Entry_Nachname.Completed += (s, e) => Entry_Vorname.Focus();
@@ -34,9 +34,14 @@ namespace X_Forms.PersonenDb.Pages
                 Vorname = Entry_Vorname.Text
             };
 
-
             //Hinzufügen zur lokalen Liste
             StaticObjects.PersonenListe.Add(person);
+
+            //Hinzufügen zur Datenbank
+            StaticObjects.PersonenDatenbank.AddPerson(person);
+
+            //Ausgabe eines Toasts
+            ToastController.ShowToastMessage($"{person.Vorname} {person.Nachname} wurde hinzugefügt.", ToastDuration.Long);
 
             //Leeren  der Eingabefelder
             Entry_Vorname.Text = string.Empty;
