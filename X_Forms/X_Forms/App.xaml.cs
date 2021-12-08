@@ -16,7 +16,9 @@ namespace X_Forms
             //MainPage = new MainPage();
 
             //Zuweisung der MainPage - Property zu einer NavigationPage(ermöglicht Stack - Navigation) mit Angabe der Startpage.
-            MainPage = new NavigationPage(new MainPage());
+            //MainPage = new NavigationPage(new MainPage());
+
+            MainPage = new NavigationBsp.FlyoutBsp.FlyoutP();
         }
 
         public DateTime timestamp { get; set; } = DateTime.Now;

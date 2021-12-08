@@ -82,5 +82,10 @@ namespace X_Forms
                 Personenliste.Remove(person);
             }
         }
+
+        private void Btn_Tabbed_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new NavigationBsp.TabbedPageBsp());
+        }
     }
 }

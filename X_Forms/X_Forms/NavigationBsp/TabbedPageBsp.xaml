@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="X_Forms.NavigationBsp.TabbedPageBsp"
+            xmlns:layouts="clr-namespace:X_Forms.Layouts">
+    <!--Pages can be added as references or inline-->
+    <ContentPage Title="Tab 1" >
+        <StackLayout>
+            <Label Text="Ich bin eine ContentPage"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"/>
+        </StackLayout>
+    </ContentPage>
+    <layouts:AbsoluteLayoutBsp/>
+    <layouts:GridLayoutBsp/>
+    <layouts:RelativeLayoutBsp/>
+
+</TabbedPage>

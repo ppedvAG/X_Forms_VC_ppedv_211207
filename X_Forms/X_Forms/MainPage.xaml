@@ -173,6 +173,8 @@
                         Clicked="Btn_Push_Clicked"/>
                 <Button x:Name="Btn_PushModal" Text="Absolute"
                         Clicked="Btn_PushModal_Clicked"/>
+                <Button x:Name="Btn_Tabbed" Text="Tabbed"
+                        Clicked="Btn_Tabbed_Clicked"/>
             </StackLayout>
 
         </StackLayout>
