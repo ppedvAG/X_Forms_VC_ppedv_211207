@@ -20,15 +20,17 @@ namespace X_Forms.PersonenDb.Services
             switch (duration)
             {
                 case ToastDuration.Long:
-                    DependencyService.Get<IToastService>().ShowLong(message);
+                    toastService.ShowLong(message);
                     break;
                 case ToastDuration.Short:
-                    DependencyService.Get<IToastService>().ShowShort(message);
+                    toastService.ShowShort(message);
                     break;
                 default:
                     break;
             }
         }
+
+        private static IToastService toastService = DependencyService.Get<IToastService>();
     }
 }
 
