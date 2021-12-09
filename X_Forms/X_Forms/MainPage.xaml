@@ -1,4 +1,5 @@
-﻿<!--vgl. CodeBehind-->
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--vgl. CodeBehind-->
 
 <!--Jede XAML-Datei hat einen Root-Container, welcher die Art der UI bestimmt. Dieser muss mit der Mutterklasse im CodeBehind übereinstimmen-->
 <!--Im Root-Container werden die in diesem Dokument benutzten Namespaces definiert, sowie der Verweis auf die anhängige Klasse (CodeBehind)-->
@@ -7,8 +8,9 @@
              x:Class="X_Forms.MainPage"
              
              xmlns:local="clr-namespace:X_Forms"
+             xmlns:loc="clr-namespace:X_Forms.Properties"
              
-             Title="MAIN">
+             Title="MainPage">
 
     <!--Jeder Container hat eine Resource-Property, in welcher Ressourcen (Objekte, Styles, Converter, ...) für diesen 
     Container bereit gestellt werden können.-->
@@ -18,6 +20,7 @@
         <x:String x:Key="BtnString">Hallo, ich bin eine Ressource</x:String>
 
         <local:FactorConverter x:Key="factorConverter"/>
+
     </ContentPage.Resources>
 
     <!--Ein ScrollView ermöglicht dem User das Scrollen-->
@@ -32,14 +35,12 @@
                  Orientation="Vertical"
                  BackgroundColor="LightBlue"
                  Padding="5"
-                 Spacing="5">
+                 Spacing="4">
 
             <!--Einfache Property-Belegungen werden in Attribut-Form direkt in den Start-Tag geschrieben-->
             <Label x:Name="Lbl_Main"
-               TextColor="White"
                HorizontalOptions="FillAndExpand"
-               VerticalOptions="Start"
-               HorizontalTextAlignment="Center">
+               VerticalOptions="Start">
 
                 <!--Jedes UI-Element hat eien Standart-Property, auf die direkt zugegriffen werden kann (meißt Text, Children, Content)-->
                 Hallo, ich bin ein String
@@ -49,23 +50,25 @@
                     <!--Unterschiedliche Werte auf verschiedenen OS in derselben Property-->
                     <OnPlatform x:TypeArguments="Color" Android="Yellow" iOS="Orange" Default="Green"/>
                 </Label.BackgroundColor>
+
                 <Label.FontSize>
                     <!--Unterschiedliche Werte auf verschiedenen Geräten in derselben Property-->
-                    <OnIdiom x:TypeArguments="x:Double" Phone="20.0" TV="40.0"/>
+                    <OnIdiom x:TypeArguments="x:Double" Phone="20.0" TV="35.0" Watch="15.0" Default="20.0"/>
                 </Label.FontSize>
 
             </Label>
+
             <!--Dieser Button nimmt den globalen Button-Style an (vgl. ResDict.xaml)-->
             <!--In XAML definierte Events benötigen einen EventHandler im CodeBehind (vgl. CodeBehind)-->
             <Button x:Name="Btn_KlickMich"
-                Text="Klick mich, ich bin ein Button"
+                Text="Klick Mich, ich bin ein Button"
                 Clicked="Btn_KlickMich_Clicked"/>
 
             <!--Grafische Ressourcen müssen in den einzelnen OS-Projekten abgelegt sein (z.B. Android/Resources/drawable)-->
-            <ImageButton x:Name="IBtn_Beispiel" 
+            <ImageButton x:Name="IBtn_Beispiel"
                      Source="test.png"
-                     WidthRequest="50"
                      BackgroundColor="Transparent"
+                     WidthRequest="50"
                      Clicked="IBtn_Beispiel_Clicked"/>
 
             <!--Die Placeholder-Property des Entries wird im Textfeld angezeigt, solange der Benutzer noch keinen Eintrag getätigt hat-->
@@ -74,11 +77,11 @@
                Placeholder="Vorname"
                Keyboard="Text"/>
             <Entry x:Name="Ent_Nachname"
-               Placeholder="Nachname"
+               Placeholder="Nachnane"
                Keyboard="Text"/>
 
             <!--Bsp eines Pickers (Äquivalent zu ComboBox)-->
-            <Picker x:Name="Pkr_Monkeys" Title="Monkeys">
+            <Picker Title="Monkeys" x:Name="Pkr_Monkeys">
                 <Picker.Items>
                     <x:String>Baboon</x:String>
                     <x:String>Capuchin Monkey</x:String>
@@ -89,11 +92,10 @@
 
             <!--Dieser Button nimmt einen explizieten Button-Style an (vgl. RessourceDict.xaml)-->
             <!--Mittels einer StaticResource-Bindung kann auf in übergeordneten Container definierte Ressourcen zugegriffen werden-->
-            <Button x:Name="BtnResource"
+            <Button x:Name="Btn_Resources"
                 Text="{StaticResource BtnString}"
-                FontSize="{StaticResource GlobalFontSize}"
-                Style="{StaticResource BtnStyle}"
-                TextColor="Yellow"/>
+                FontSize="{StaticResource globalFontSize}"
+                Style="{StaticResource BtnStyle}"/>
 
             <!--An eine Ressource können beliebig viele Properties gehängt werden-->
             <Label Text="{StaticResource BtnString}"/>
@@ -117,9 +119,7 @@
                     WidthRequest="300"/>
                 <!--Soll der Wert nicht unverandert übertragen werden oder sind die Property-Typen unterschiedlich muss ein Converter
                 zwischengeschaltet werden (vgl. FactorConverter.cs)-->
-                <Label Text="{Binding Source={x:Reference Sdr_Binding_02}, Path=Value, Mode=OneWay, StringFormat='Wert: {0}',
-                            ConverterParameter=2.5,
-                            Converter={StaticResource factorConverter}}"/>
+                <Label Text="{Binding Source={x:Reference Sdr_Binding_02}, Path=Value, Mode=OneWay, StringFormat='Wert: {0}', Converter={StaticResource factorConverter}, ConverterParameter=2.5}"/>
             </StackLayout>
 
             <!--DataBinding-->
@@ -137,7 +137,7 @@
                 <Entry Text="{Binding Nachname}"/>
 
                 <!--Button zur Codeseitigen Veränderung der Person-Properties-->
-                <Button Text="Namen ändern" x:Name="Btn_Name" Clicked="Btn_Name_Clicked"/>
+                <Button x:Name="Btn_Aendern" Text="Namen ändern" Clicked="Btn_Aendern_Clicked"/>
             </StackLayout>
 
             <!--Die Property 'ItemSource' verweist auf die Quelle der Items für die Liste.
@@ -150,6 +150,8 @@
                     <!--Mittels DataTemplates kann das Erscheinen von einzelnen Elementen von ItemControls (hier ListView) defniert werden.
                     DataTemplates müssen immer ein UI-Element vom Typ Cell beinhalten.-->
                     <DataTemplate>
+                        <!--Innerhalb von DataTemplates findet immer ein DataBinding an die Elemente der ItemSource statt (vgl. CodeBehind).
+                                Dadurch finden Kurzbindungen an die Properties der Listenelemente statt.-->
                         <ViewCell>
                             <StackLayout Orientation="Horizontal" Padding="2">
                                 <!--Innerhalb von DataTemplates findet immer ein DataBinding an die Elemente der ItemSource statt (vgl. CodeBehind).
@@ -162,6 +164,7 @@
                             <ViewCell.ContextActions>
                                 <MenuItem Text="Löschen" Clicked="MenuItem_Clicked" CommandParameter="{Binding}"/>
                             </ViewCell.ContextActions>
+
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
@@ -169,14 +172,33 @@
 
             <!--Verweis auf Beispiel-Layouts und -Navigation (vgl. CodeBehind, NavigationBsp und Layouts)-->
             <StackLayout Orientation="Horizontal">
-                <Button x:Name="Btn_Push" Text="Grid"
-                        Clicked="Btn_Push_Clicked"/>
-                <Button x:Name="Btn_PushModal" Text="Absolute"
-                        Clicked="Btn_PushModal_Clicked"/>
-                <Button x:Name="Btn_Tabbed" Text="Tabbed"
-                        Clicked="Btn_Tabbed_Clicked"/>
+                <Button HorizontalOptions="StartAndExpand"
+                        Text="Grid"
+                        Clicked="Push_Clicked"/>
+                <Button HorizontalOptions="StartAndExpand"
+                        Text="Stack"
+                        Clicked="PushModal_Clicked"/>
+                <Button HorizontalOptions="StartAndExpand"
+                        Text="Tabbed"
+                        Clicked="Button_Clicked"/>
             </StackLayout>
 
+            <!--Label zum Anzeigen des Batterie-Status mittels Xamarin.Essentials (vgl. CodeBehind)-->
+            <Label x:Name="Lbl_Battery"/>
+
+            <!--Beispiele für lokalisierte Beschriftungen (vgl. CodeBehind sowie Resource.resx und Resource.de.resx)-->
+            <!--Mittels der x:Static-Bindung können Properties an resx-Files gebunden werden-->
+            <!--Button zum Öffnen der Youtube-App-->
+            <Button x:Name="Btn_Youtube" Clicked="Btn_Youtube_Clicked" Text="{x:Static loc:Resources.Btn_Youtube_Text}"/>
+            <!--Button zum Senden einer MC-Nachricht (vgl. CodeBehind und Pg_Subscriber.cs)-->
+            <Button x:Name="Btn_MCSender" Text="{x:Static loc:Resources.Btn_McSender_Text}" Clicked="Btn_MCSender_Clicked"/>
+
         </StackLayout>
+
     </ScrollView>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Liste löschen" Clicked="ToolbarItem_Clicked"/>
+    </ContentPage.ToolbarItems>
+
 </ContentPage>
